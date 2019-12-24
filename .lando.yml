@@ -1,0 +1,7 @@
+name: symfonydeliverrando
+recipe: lamp
+config:
+  webroot: ./public
+  xdebug: true
+  php: '7.3'
+  database: mysql:5.7
