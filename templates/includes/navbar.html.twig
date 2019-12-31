@@ -1,0 +1,30 @@
+<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+    <a class="navbar-brand" href="{{ path('index') }}">Home</a>
+    <div class="collapse navbar-collapse">
+        <ul class="navbar-nav mr-auto">
+            {% for navigationItem in navigation %}
+                <li class="nav-item {f:if(condition: navigationItem.active, then: 'active')}"
+                    id="{{ navigationItem.title }}" onmouseover="showNavItem(this.id)">
+                    <a class="nav-link"
+                       href="{{ path(navigationItem.link) }}"
+                       title="{{ navigationItem.title }}"
+                    >
+                        {{ navigationItem.title }}
+                    </a>
+                </li>
+                {% if navigationItem.children %}
+                    {% for childItem in navigationItem.children %}
+                        <li class="nav-item {{ navigationItem.title }}Child" style="background-color: #0F0F0F; display: none">
+                            <a class="nav-link"
+                               href="{{ path(childItem.link) }}"
+                               title="{{ childItem.title }}"
+                            >
+                                {{ childItem.title }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+</nav>

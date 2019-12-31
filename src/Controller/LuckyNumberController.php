@@ -8,7 +8,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class LuckyNumberController extends AbstractController
 {
     /**
-     * @Route("/{yourNumber}", name="index", methods={"GET"})
+     * @Route("/luckyNumber/{yourNumber}", name="lucky_number", methods={"GET"})
      */
     public function index($yourNumber = -1)
     {

@@ -1,0 +1,43 @@
+{% extends 'default.html.twig' %}
+
+{% block content %}
+
+    <div class="row" id="operationMsg">
+        {% for msg in app.flashes('info') %}
+            <p><em>{{ msg }}</em></p>
+        {% endfor %}
+    </div>
+
+    <div class="foodTable row">
+        <table class="table-striped table-bordered">
+            <thead>
+            <tr>
+                <td><strong>Product name</strong></td>
+                <td><strong>Product description</strong></td>
+                <td><strong>Quantity</strong></td>
+                <td><strong>Delivery time</strong></td>
+                <td><strong>Categories</strong></td>
+            </tr>
+            </thead>
+            <tbody>
+            {% for product in products %}
+                <tr>
+                    <td>{{ product.name }}</td>
+                    <td>{{ product.description }}</td>
+                    <td>{{ product.quantity }}</td>
+                    <td>{{ product.deliverytime.format('H:i') }}</td>
+                    <td>{{ product.categories|join(', ') }}</td>
+
+                        <td><a href="{{ path('remove', {product: product.id}) }}"><strong>-</strong></a></td>
+
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="addProductDiv row">
+        {{ form(createProductForm) }}
+    </div>
+
+{% endblock %}

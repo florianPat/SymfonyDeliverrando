@@ -8,6 +8,6 @@ lando composer require symfony/apache-pack
 -------------------
 
 doctrine:
-lando php bin/console make:entity
+lando php bin/console make:entity / make:user
 lando php bin/console make:migration
 lando php bin/console doctrine:migrations:migrate

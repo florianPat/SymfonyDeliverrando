@@ -39,18 +39,12 @@ class Product
     private $deliverytime;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Deliverrando", inversedBy="products")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $deliverrando;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Category", mappedBy="relation")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Category", mappedBy="products")
      */
     private $categories;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Order", mappedBy="product")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Order", mappedBy="products")
      */
     private $orders;
 
@@ -109,18 +103,6 @@ class Product
     public function setDeliverytime(?\DateTimeInterface $deliverytime): self
     {
         $this->deliverytime = $deliverytime;
-
-        return $this;
-    }
-
-    public function getDeliverrando(): ?Deliverrando
-    {
-        return $this->deliverrando;
-    }
-
-    public function setDeliverrando(?Deliverrando $deliverrando): self
-    {
-        $this->deliverrando = $deliverrando;
 
         return $this;
     }

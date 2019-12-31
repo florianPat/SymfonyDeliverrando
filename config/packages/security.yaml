@@ -8,6 +8,7 @@ security:
             security: false
         main:
             anonymous: lazy
+            access_denied_handler: App\Security\AccessDeniedHandler
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#firewalls-authentication
