@@ -1,6 +1,7 @@
 {% extends 'default.html.twig' %}
 
 {% block content %}
+    {{ dump(firewall_context) }}
 
     <div class="row" id="operationMsg">
         {% for msg in app.flashes('info') %}
@@ -8,36 +9,103 @@
         {% endfor %}
     </div>
 
+    {#
+    <div v-if="finishedOrder == 1">
+        <h1>Vielen Dank für ihre Bestellung!</h1>
+        <p>Sie müssen nur noch <food-counter :json-response="makeOrderJsonResponse"></food-counter> Minuten auf ihr Essen warten!</p>
+        <br />
+        <food-progress :json-response="makeOrderJsonResponse" :progress-length="makeOrderJsonResponse.quantitySum"
+                       link-get-progress-action='<f:link.action pageType="100" pageUid="6" action="progressUpdate"></f:link.action>'></food-progress>
+    </div>
+    <div v-if="finishedOrder == -1">
+        <h1 class="errorTextColor">Leider gab es einen Fehler bei der Übermittlung :/</h1>
+    </div>
+    #}
+
     <div class="foodTable row">
-        <table class="table-striped table-bordered">
-            <thead>
-            <tr>
-                <td><strong>Product name</strong></td>
-                <td><strong>Product description</strong></td>
-                <td><strong>Quantity</strong></td>
-                <td><strong>Delivery time</strong></td>
-                <td><strong>Categories</strong></td>
-            </tr>
-            </thead>
-            <tbody>
-            {% for product in products %}
+        <div class="col-8">
+            <table class="table-striped table-bordered">
+                <thead>
                 <tr>
-                    <td>{{ product.name }}</td>
-                    <td>{{ product.description }}</td>
-                    <td>{{ product.quantity }}</td>
-                    <td>{{ product.deliverytime.format('H:i') }}</td>
-                    <td>{{ product.categories|join(', ') }}</td>
-
-                        <td><a href="{{ path('remove', {product: product.id}) }}"><strong>-</strong></a></td>
-
+                    <td><strong>Product name</strong></td>
+                    <td><strong>Product description</strong></td>
+                    <td><strong>Quantity</strong></td>
+                    <td><strong>Delivery time</strong></td>
+                    <td><strong>Categories</strong></td>
                 </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                {% for product in products %}
+                    <tr>
+                        <td>{{ product.name }}</td>
+                        <td>{{ product.description }}</td>
+                        <td>{{ product.quantity }}</td>
+                        <td>{{ product.deliverytime.format('H:i') }}</td>
+                        <td>{{ product.categories|join(', ') }}</td>
+                        {% if is_granted('ROLE_ADMIN') %}
+                        <td><a href="{{ path('remove', {product: product.id}) }}"><strong>-</strong></a></td>
+                        {% endif %}
+                        {% if is_granted('ROLE_CUSTOMER') %}
+                        <td><a href="{{ path('order', {product: product.id}) }}"><img src="{{ asset('build/images/plus.jpg') }}" width="30rem" height="30rem"></a></td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="col-3">
+            <!--<shopping-card></shopping-card>-->
+        </div>
     </div>
 
+    {% if is_granted('ROLE_ADMIN') %}
     <div class="addProductDiv row">
         {{ form(createProductForm) }}
+    </div>
+    {% endif %}
+
+    <div class="loginSectionDiv">
+        {% if app.user %}
+            <a href="{{ path('app_logout') }}">Logout</a>
+        {% else %}
+            <h5>Du bist ein Besucher!</h5>
+
+            <div class="accordion">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <button class="btn btn-link" onclick="accordionToggler('adminLogin')">
+                                Als Anbieter anmelden
+                            </button>
+                        </h5>
+                    </div>
+                    <div id="adminLogin" style="display: none" class="accordionClass">
+                        {{ include('security/login.html.twig') }}
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <button class="btn btn-link" onclick="accordionToggler('personLogin')">
+                                Oder als Besteller anmelden
+                            </button>
+                        </h5>
+                    </div>
+                    <div id="personLogin" style="display: none" class="accordionClass">
+                        <div id="personLoginForm">
+                            {{ form(customerLoginForm) }}
+                        </div>
+                        <div id="personRegisterForm" style="display: none">
+                            {{ form(customerRegisterForm) }}
+                        </div>
+                        <div>
+                            <p id="personShowLoginFormText" style="display: none;">Du hast schon einen Account? Einfach schnell <button class="btn" onclick="switchToLoginForm()">hier</button> anmelden und direkt dein Lieblingsessen bestellen!</p>
+                            <p id="personShowRegisterFormText">Du bist noch kein Mitglied? Einfach schnell <button class="btn" onclick="switchToRegisterForm()">hier</button> registrieren und direkt dein Lieblingsessen bestellen!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
     </div>
 
 {% endblock %}

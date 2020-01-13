@@ -13,13 +13,13 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class CreateProductType extends AbstractType
 {
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         //NOTE: So that the form knows with which kind of objects it is interacting
         $resolver->setDefaults(['data_class' => Product::class]);
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add('name', TextType::class)
             ->add('description', TextareaType::class, ['required' => false])
